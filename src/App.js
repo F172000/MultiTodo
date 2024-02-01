@@ -6,6 +6,7 @@ import {createBrowserRouter,RouterProvider} from 'react-router-dom';
 import Main from './components/main';
 import ElevateAppBar from './components/header';
 import BottomAppBar from './components/footer';
+import CollapsibleTable from './components/view';
 function App() {
   const router=createBrowserRouter([
     // {
@@ -17,8 +18,8 @@ function App() {
       element:<ElevateAppBar/>
     },
     {
-      path:'/bottom',
-      element:<BottomAppBar/>
+      path:'/view',
+      element:<CollapsibleTable/>
     }
   ])
   return (

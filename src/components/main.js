@@ -5,8 +5,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addtodatabase, removefromdatabase,updatetodatabase } from './redux/firebaseOperation';
 import db from './redux/Database';
-import {Modal,Box,Typography} from '@mui/material';
-import {Button,IconButton} from '@mui/material';
+import {Button,IconButton,Modal,Box,Typography,
+Collapse,
+Table,TableBody,TableCell,TableHead,TableRow} from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -20,9 +23,9 @@ const style = {
   p: 4,
 };
 export default function Main() {
-  const [open, setOpen] = useState(false);
+  const [openmodal,setopenmodal] = useState(false);
   const [data,setdata]=useState([{id:'',title:'',list:[{name:''}]}]);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setopenmodal(false);
   const state=useSelector((state)=>state);
   console.log(state);
   const listings=useSelector((state)=>state.list);
@@ -53,13 +56,13 @@ export default function Main() {
      dispatch({type:'setstate',payload:newData});
     }
 //useEffect to load data one time after re-render
-  useEffect(()=>{
+   useEffect(()=>{
     const fetchData=async()=>{
       await loadData();
       await loadlist();
     }
     fetchData();
-  },[]);
+    },[]);
 
  const [title,settitle]=useState('');
  const [list,setlist]=useState([{name:''}]);
@@ -150,7 +153,7 @@ export default function Main() {
   }
 
   const editlist=(id)=>{
-    setOpen(true);
+    setopenmodal(true);
     const item=listings.filter((item)=>item.id===id);
     const itemdata={
       id:item[0].id,
@@ -202,7 +205,22 @@ export default function Main() {
          ))}
         <Button variant='contained' onClick={submittask}>Add Task</Button>
         </div>
-        {listings && listings.length > 0 ? (listings.map((t,i)=>(
+        <Table >
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell>Task Title</TableCell>
+            <TableCell >Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {listings.map((row,index) => (
+              <Row key={index} setlist={setlist} settitle={settitle} row={row} id={row.id} listings={listings} dispatch={dispatch}/>
+          ))}
+        </TableBody>
+      </Table>
+        {/* <CollapsibleTable listings={listings} /> */}
+        {/* {listings && listings.length > 0 ? (listings.map((t,i)=>(
         <React.Fragment key={i}>
           <div className='listt'>
           <h5 >{t.title}</h5>
@@ -210,7 +228,7 @@ export default function Main() {
           <IconButton onClick={()=>removelist(t.id,i)}><i className="fa-solid fa-trash"></i></IconButton>
           <IconButton onClick={()=>editlist(t.id,i)}><i className="fas fa-pen-to-square"></i></IconButton>
           <Modal
-          open={open}
+          open={openmodal}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
@@ -242,7 +260,7 @@ export default function Main() {
           </React.Fragment>
           ))}
            </React.Fragment>
-           ))):<p>No tasks are added</p>}
+           ))):<p>No tasks are added</p>} */}
         </div>
 
       <div className='multii'>
@@ -255,5 +273,161 @@ export default function Main() {
       </div>
   );
 }
+function Row({row,id,setlist,settitle,dispatch,listings}) {
+ 
+const [open, setOpen] = React.useState(false);
+const [openmodal,setopenmodal] = useState(false);
+const [data,setdata]=useState([{id:'',title:'',list:[{name:''}]}]);
+const handleClose = () => setopenmodal(false);
+const savechanges=async()=>{
+  await updatetodatabase(data[0],dispatch);
+  settitle('');
+  setlist([{name:''}]);
+  handleClose();
+}
 
+const addsubitemtask=(index)=>{
+  const newdata = [...data];
+newdata[index] = {
+  ...newdata[index],
+  list: [...newdata[index].list, { name: "" }],
+};
+setdata(newdata);
+  // console.log(data[index].list);
+  // const newdata=[...data];
+  // newdata[index].list.push({name:""});
+  // setdata(newdata);
+}
+
+const onremovesubitem=(index,ind)=>{
+//   let newupdatelist = [...data];
+//   newupdatelist[index] = {
+//   ...newupdatelist[index],
+//   list: [...newupdatelist[index].list],
+// };
+// newupdatelist[index].list[ind] = {
+//   ...newupdatelist[index].list[ind].splice(ind,1)
+// };
+// console.log(newupdatelist);
+  // const newdata = [...data];
+  // console.log(newdata[index].list[ind]);
+  // newdata[index].list.splice(ind, 1);
+  const newdata = data.map((item, i) => {
+    if (i === index) {
+      // If this is the array that needs modification
+      return {
+        ...item,
+        list: item.list.filter((_, j) => j !== ind)
+      };
+    }
+    return item;
+  });
+  setdata(newdata);
+}
+
+const updatesubtask=(event,ind,index)=>{
+  let newupdatelist = [...data];
+  newupdatelist[index] = {
+  ...newupdatelist[index],
+  list: [...newupdatelist[index].list],
+};
+newupdatelist[index].list[ind] = {
+  ...newupdatelist[index].list[ind],
+  name: event.target.value,
+};
+console.log(newupdatelist);
+// newupdatelist[index].list[ind].name=event.target.value;
+setdata(newupdatelist);
+}
+
+const handledatatitle=(event,index)=>{
+  let newdata=[...data];
+  newdata[index].title=event.target.value;
+  setdata(newdata);
+  }
+
+const removelist=async(id)=>{
+  removefromdatabase(id,dispatch);
+}
+
+const editlist=(id)=>{
+  setopenmodal(true);
+  const item=listings.filter((item)=>item.id===id);
+  const itemdata={
+    id:item[0].id,
+    title:item[0].title,
+    list:item[0].list
+  }
+  setdata([itemdata]);
+}
+return (
+  <React.Fragment>
+    <TableRow >
+      <TableCell>
+        <IconButton
+          size="small"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </TableCell>
+      <TableCell component="th" scope="row">
+        {row.title}
+      </TableCell>
+      <TableCell >  
+      <IconButton onClick={()=>removelist(id)}><i className="fa-solid fa-trash"></i></IconButton>
+      <IconButton onClick={()=>editlist(id)}><i className="fas fa-pen-to-square"></i></IconButton></TableCell>
+      <Modal
+          open={openmodal}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+         >
+        <Box sx={style}>
+        <Typography variant='h5' className='mb-1'>Update the task</Typography>
+        {data?.map((item,index)=>(
+        <React.Fragment key={index}>
+         <input className='form-control' type='text' value={item.title} onChange={(event)=>handledatatitle(event,index)}></input>
+         {item.list.map((subitem,ind)=>(
+         <div key={ind} className='listt'>
+         <input  className='form-control' type='text' value={subitem.name} onChange={(event)=>updatesubtask(event,ind,index)} ></input>
+         <IconButton ><i className="fas fa-minus" onClick={()=>onremovesubitem(index,ind)}></i></IconButton>
+         {(ind===item.list.length-1)? <IconButton onClick={()=>addsubitemtask(index)}><i className="fas fa-plus"></i></IconButton>:<></>}
+         </div>
+         ))}
+         </React.Fragment>
+         ))}
+         <Button variant='contained' className='p-2 mt-2' onClick={()=>savechanges()}>save changes</Button>
+        </Box>
+      </Modal>
+    </TableRow>
+    <TableRow>
+      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <Box sx={{ margin: 1 }}>
+            <Table size="small" aria-label="purchases">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Todo's</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {row.list.map((historyRow,i) => (
+                  <TableRow 
+                  key={i}
+                  >
+                    <TableCell >
+                      {historyRow.name}
+                    </TableCell>
+                  </TableRow>
+               ))}
+              </TableBody>
+            </Table>
+          </Box>
+        </Collapse>
+      </TableCell>
+    </TableRow>
+  </React.Fragment>
+);
+}
 
