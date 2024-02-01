@@ -371,7 +371,7 @@ return (
           size="small"
           onClick={() => setOpen(!open)}
         >
-          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          {open ? <KeyboardArrowUpIcon sx={{color:'white'}} /> : <KeyboardArrowDownIcon sx={{color:'white'}} />}
         </IconButton>
       </TableCell>
       <TableCell component="th" scope="row">
