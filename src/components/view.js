@@ -7,7 +7,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
@@ -31,7 +30,7 @@ function Row(props) {
           {row.title}
         </TableCell>
         <TableCell >  
-        <IconButton  ><i className="fa-solid fa-trash"></i></IconButton>
+        <IconButton ><i className="fa-solid fa-trash"></i></IconButton>
         <IconButton ><i className="fas fa-pen-to-square"></i></IconButton></TableCell>
       </TableRow>
       <TableRow>
@@ -72,7 +71,7 @@ export default function CollapsibleTable({listings}) {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Task Title</TableCell>
+            <TableCell>Task Titlee</TableCell>
             <TableCell >Actions</TableCell>
           </TableRow>
         </TableHead>
