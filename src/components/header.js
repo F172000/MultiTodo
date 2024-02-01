@@ -43,7 +43,7 @@ export default function ElevateAppBar(props) {
         <AppBar className='appbarcolor'>
           <Toolbar>
             <Typography variant="h6" component="div">
-              MultiTo App
+              MultiTodo App
             </Typography>
           </Toolbar>
         </AppBar>
