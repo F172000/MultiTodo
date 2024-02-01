@@ -192,6 +192,7 @@ export default function Main() {
 
   return (
     <div className="App">
+      <form>
        <div className='single'> 
         <input required className='form-control' placeholder='Enter task title' type='text' onChange={(e)=>settitle(e.target.value)}></input>
        <div >
@@ -211,8 +212,8 @@ export default function Main() {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Task Title</TableCell>
-            <TableCell >Actions</TableCell>
+            <TableCell style={{fontWeight:'bold'}}>Task Title</TableCell>
+            <TableCell style={{fontWeight:'bold'}} >Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -264,7 +265,7 @@ export default function Main() {
            </React.Fragment>
            ))):<p>No tasks are added</p>} */}
         </div>
-
+        </form>
       <div className='multii'>
       <input className='form-control' type='text' placeholder='Enter the task' value={task.name} onChange={(e)=>settask(e.target.value)}></input>
       <button className='btn btn-success w-100' onClick={handleAddTask}>Change</button>
@@ -410,7 +411,7 @@ return (
             <Table size="small" aria-label="purchases">
               <TableHead>
                 <TableRow>
-                  <TableCell>Todo's</TableCell>
+                  <TableCell style={{fontWeight:'bold'}}>Todo's</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
