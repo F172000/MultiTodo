@@ -43,9 +43,6 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
-.multi input{
-  width: 50%;
-}
 .supmulti{
 display: flex;
 flex-direction: column;
@@ -101,6 +98,15 @@ flex-direction: column;
 }
 .fa-plus{
   color: #4e7de2;
+}
+.single{
+  padding:1em;
+  border-radius: 5%;
+  background-color:rgb(119, 169, 222);
+}
+.addtaskbtn{
+  display: flex;
+  justify-content: center;
 }
 
 

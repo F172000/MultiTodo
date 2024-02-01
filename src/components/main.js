@@ -193,17 +193,19 @@ export default function Main() {
   return (
     <div className="App">
        <div className='single'> 
-        <input className='form-control' placeholder='Enter task title' type='text' onChange={(e)=>settitle(e.target.value)}></input>
+        <input required className='form-control' placeholder='Enter task title' type='text' onChange={(e)=>settitle(e.target.value)}></input>
        <div >
          {list.map((field,index)=>(
          <div className='multi' key={index}>
-         <input  className='form-control' type='text' placeholder='Add list of tasks' value={field.name} onChange={(event)=>addsubtask(index,event)}></input>
+         <input required className='form-control' type='text' placeholder='Add list of tasks' value={field.name} onChange={(event)=>addsubtask(index,event)}></input>
          <button className='buttonadd' onClick={()=>onremove(index)}>
           <i className="fas fa-minus"></i></button>
         {(index===list.length-1)?<button className='buttonadd' onClick={addtask}><i className="fas fa-plus"></i></button>:<></>}
          </div>
          ))}
-        <Button variant='contained' onClick={submittask}>Add Task</Button>
+         <div className='addtaskbtn'>
+        <button className='btn btn-success w-100' onClick={submittask}>Add Task</button>
+        </div>
         </div>
         <Table >
         <TableHead>
@@ -390,7 +392,7 @@ return (
          <input className='form-control' type='text' value={item.title} onChange={(event)=>handledatatitle(event,index)}></input>
          {item.list.map((subitem,ind)=>(
          <div key={ind} className='listt'>
-         <input  className='form-control' type='text' value={subitem.name} onChange={(event)=>updatesubtask(event,ind,index)} ></input>
+         <input className='form-control' type='text' value={subitem.name} onChange={(event)=>updatesubtask(event,ind,index)} ></input>
          <IconButton ><i className="fas fa-minus" onClick={()=>onremovesubitem(index,ind)}></i></IconButton>
          {(ind===item.list.length-1)? <IconButton onClick={()=>addsubitemtask(index)}><i className="fas fa-plus"></i></IconButton>:<></>}
          </div>
