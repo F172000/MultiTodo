@@ -10,6 +10,7 @@ Collapse,
 Table,TableBody,TableCell,TableHead,TableRow} from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -22,6 +23,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 export default function Main() {
   const state=useSelector((state)=>state);
   console.log(state);
@@ -118,12 +120,6 @@ export default function Main() {
     setlist(newlist);
    }
 
-  // const onremovesubitem=(index,ind)=>{
-  //   const newdata = [...data];
-  //   console.log(newdata[index].list[ind]);
-  //   newdata[index].list.splice(ind, 1);
-  //   setdata(newdata);
-  // }
 
   const addsubtask=(index,event)=>{
     const newlist = [...list];
@@ -132,60 +128,11 @@ export default function Main() {
     console.log(newlist);
   }
 
-  // const addsubitemtask=(index)=>{
-  //   console.log(data[index].list);
-  //   const newdata=[...data];
-  //   newdata[index].list.push({name:""});
-  //   setdata(newdata);
-  // }
-
   const submittask=async()=>{
   await addtodatabase(title,list,dispatch);
   settitle('');
   setlist([{name:''}]);
   }
-
-  // const removelist=async(id)=>{
-  //   removefromdatabase(id,dispatch);
-  // }
-
-  // const editlist=(id)=>{
-  //   setopenmodal(true);
-  //   const item=listings.filter((item)=>item.id===id);
-  //   const itemdata={
-  //     id:item[0].id,
-  //     title:item[0].title,
-  //     list:item[0].list
-  //   }
-  //   setdata([itemdata]);
-  // }
-
-  // const updatesubtask=(event,ind,index)=>{
-  //   let newupdatelist = [...data];
-  //   newupdatelist[index] = {
-  //   ...newupdatelist[index],
-  //   list: [...newupdatelist[index].list],
-  // };
-  // newupdatelist[index].list[ind] = {
-  //   ...newupdatelist[index].list[ind],
-  //   name: event.target.value,
-  // };
-  // console.log(newupdatelist);
-  // setdata(newupdatelist);
-  // }
-
-  // const handledatatitle=(event,index)=>{
-  // let newdata=[...data];
-  // newdata[index].title=event.target.value;
-  // setdata(newdata);
-  // }
-
-  // const savechanges=async()=>{
-  //   await updatetodatabase(data[0],dispatch);
-  //   settitle('');
-  //   setlist([{name:''}]);
-  //   handleClose();
-  // }
 
   return (
     <div className="App">
@@ -233,15 +180,13 @@ export default function Main() {
 }
 
 
-
-
-
 function Row({row,id,setlist,settitle,dispatch,listings}) {
  
 const [open, setOpen] = React.useState(false);
 const [openmodal,setopenmodal] = useState(false);
 const [data,setdata]=useState([{id:'',title:'',list:[{name:''}]}]);
 const handleClose = () => setopenmodal(false);
+
 const savechanges=async()=>{
   await updatetodatabase(data[0],dispatch);
   settitle('');
@@ -276,13 +221,13 @@ const updatesubtask=(event,ind,index)=>{
   newupdatelist[index] = {
   ...newupdatelist[index],
   list: [...newupdatelist[index].list],
-};
-newupdatelist[index].list[ind] = {
+   };
+     newupdatelist[index].list[ind] = {
   ...newupdatelist[index].list[ind],
   name: event.target.value,
-};
-console.log(newupdatelist);
-setdata(newupdatelist);
+  };
+    console.log(newupdatelist);
+    setdata(newupdatelist);
 }
 
 const handledatatitle=(event,index)=>{
@@ -305,6 +250,7 @@ const editlist=(id)=>{
   }
   setdata([itemdata]);
 }
+
 return (
   <React.Fragment>
     <TableRow >
