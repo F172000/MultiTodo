@@ -23,9 +23,6 @@ const style = {
   p: 4,
 };
 export default function Main() {
-  const [openmodal,setopenmodal] = useState(false);
-  const [data,setdata]=useState([{id:'',title:'',list:[{name:''}]}]);
-  const handleClose = () => setopenmodal(false);
   const state=useSelector((state)=>state);
   console.log(state);
   const listings=useSelector((state)=>state.list);
@@ -121,12 +118,12 @@ export default function Main() {
     setlist(newlist);
    }
 
-  const onremovesubitem=(index,ind)=>{
-    const newdata = [...data];
-    console.log(newdata[index].list[ind]);
-    newdata[index].list.splice(ind, 1);
-    setdata(newdata);
-  }
+  // const onremovesubitem=(index,ind)=>{
+  //   const newdata = [...data];
+  //   console.log(newdata[index].list[ind]);
+  //   newdata[index].list.splice(ind, 1);
+  //   setdata(newdata);
+  // }
 
   const addsubtask=(index,event)=>{
     const newlist = [...list];
@@ -135,12 +132,12 @@ export default function Main() {
     console.log(newlist);
   }
 
-  const addsubitemtask=(index)=>{
-    console.log(data[index].list);
-    const newdata=[...data];
-    newdata[index].list.push({name:""});
-    setdata(newdata);
-  }
+  // const addsubitemtask=(index)=>{
+  //   console.log(data[index].list);
+  //   const newdata=[...data];
+  //   newdata[index].list.push({name:""});
+  //   setdata(newdata);
+  // }
 
   const submittask=async()=>{
   await addtodatabase(title,list,dispatch);
@@ -148,47 +145,47 @@ export default function Main() {
   setlist([{name:''}]);
   }
 
-  const removelist=async(id)=>{
-    removefromdatabase(id,dispatch);
-  }
+  // const removelist=async(id)=>{
+  //   removefromdatabase(id,dispatch);
+  // }
 
-  const editlist=(id)=>{
-    setopenmodal(true);
-    const item=listings.filter((item)=>item.id===id);
-    const itemdata={
-      id:item[0].id,
-      title:item[0].title,
-      list:item[0].list
-    }
-    setdata([itemdata]);
-  }
+  // const editlist=(id)=>{
+  //   setopenmodal(true);
+  //   const item=listings.filter((item)=>item.id===id);
+  //   const itemdata={
+  //     id:item[0].id,
+  //     title:item[0].title,
+  //     list:item[0].list
+  //   }
+  //   setdata([itemdata]);
+  // }
 
-  const updatesubtask=(event,ind,index)=>{
-    let newupdatelist = [...data];
-    newupdatelist[index] = {
-    ...newupdatelist[index],
-    list: [...newupdatelist[index].list],
-  };
-  newupdatelist[index].list[ind] = {
-    ...newupdatelist[index].list[ind],
-    name: event.target.value,
-  };
-  console.log(newupdatelist);
-  setdata(newupdatelist);
-  }
+  // const updatesubtask=(event,ind,index)=>{
+  //   let newupdatelist = [...data];
+  //   newupdatelist[index] = {
+  //   ...newupdatelist[index],
+  //   list: [...newupdatelist[index].list],
+  // };
+  // newupdatelist[index].list[ind] = {
+  //   ...newupdatelist[index].list[ind],
+  //   name: event.target.value,
+  // };
+  // console.log(newupdatelist);
+  // setdata(newupdatelist);
+  // }
 
-  const handledatatitle=(event,index)=>{
-  let newdata=[...data];
-  newdata[index].title=event.target.value;
-  setdata(newdata);
-  }
+  // const handledatatitle=(event,index)=>{
+  // let newdata=[...data];
+  // newdata[index].title=event.target.value;
+  // setdata(newdata);
+  // }
 
-  const savechanges=async()=>{
-    await updatetodatabase(data[0],dispatch);
-    settitle('');
-    setlist([{name:''}]);
-    handleClose();
-  }
+  // const savechanges=async()=>{
+  //   await updatetodatabase(data[0],dispatch);
+  //   settitle('');
+  //   setlist([{name:''}]);
+  //   handleClose();
+  // }
 
   return (
     <div className="App">
@@ -222,48 +219,6 @@ export default function Main() {
           ))}
         </TableBody>
       </Table>
-        {/* <CollapsibleTable listings={listings} /> */}
-        {/* {listings && listings.length > 0 ? (listings.map((t,i)=>(
-        <React.Fragment key={i}>
-          <div className='listt'>
-          <h5 >{t.title}</h5>
-          <div>
-          <IconButton onClick={()=>removelist(t.id,i)}><i className="fa-solid fa-trash"></i></IconButton>
-          <IconButton onClick={()=>editlist(t.id,i)}><i className="fas fa-pen-to-square"></i></IconButton>
-          <Modal
-          open={openmodal}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-         >
-        <Box sx={style}>
-        <Typography variant='h5' className='mb-1'>Update the task</Typography>
-        {data?.map((item,index)=>(
-        <React.Fragment key={index}>
-         <input className='form-control' type='text' value={item.title} onChange={(event)=>handledatatitle(event,index)}></input>
-         {item.list.map((subitem,ind)=>(
-         <div key={ind} className='listt'>
-         <input  className='form-control' type='text' value={subitem.name} onChange={(event)=>updatesubtask(event,ind,index)} ></input>
-         <IconButton ><i className="fas fa-minus" onClick={()=>onremovesubitem(index,ind)}></i></IconButton>
-         {(ind===item.list.length-1)? <IconButton onClick={()=>addsubitemtask(index)}><i className="fas fa-plus"></i></IconButton>:<></>}
-         </div>
-         ))}
-         </React.Fragment>
-         ))}
-         <Button variant='contained' className='p-2 mt-2' onClick={()=>savechanges()}>save changes</Button>
-        </Box>
-      </Modal>
-      </div>
-      </div>
-          {t.list.map((l,k)=>(
-           <React.Fragment key={l.id}>
-          <ul  className="list-group">
-           <li>{l.name}</li> 
-          </ul>
-          </React.Fragment>
-          ))}
-           </React.Fragment>
-           ))):<p>No tasks are added</p>} */}
         </div>
         </form>
       <div className='multii'>
@@ -276,6 +231,11 @@ export default function Main() {
       </div>
   );
 }
+
+
+
+
+
 function Row({row,id,setlist,settitle,dispatch,listings}) {
  
 const [open, setOpen] = React.useState(false);
@@ -296,28 +256,11 @@ newdata[index] = {
   list: [...newdata[index].list, { name: "" }],
 };
 setdata(newdata);
-  // console.log(data[index].list);
-  // const newdata=[...data];
-  // newdata[index].list.push({name:""});
-  // setdata(newdata);
 }
 
 const onremovesubitem=(index,ind)=>{
-//   let newupdatelist = [...data];
-//   newupdatelist[index] = {
-//   ...newupdatelist[index],
-//   list: [...newupdatelist[index].list],
-// };
-// newupdatelist[index].list[ind] = {
-//   ...newupdatelist[index].list[ind].splice(ind,1)
-// };
-// console.log(newupdatelist);
-  // const newdata = [...data];
-  // console.log(newdata[index].list[ind]);
-  // newdata[index].list.splice(ind, 1);
   const newdata = data.map((item, i) => {
     if (i === index) {
-      // If this is the array that needs modification
       return {
         ...item,
         list: item.list.filter((_, j) => j !== ind)
@@ -339,7 +282,6 @@ newupdatelist[index].list[ind] = {
   name: event.target.value,
 };
 console.log(newupdatelist);
-// newupdatelist[index].list[ind].name=event.target.value;
 setdata(newupdatelist);
 }
 
@@ -390,10 +332,10 @@ return (
         <Typography variant='h5' className='mb-1'>Update the task</Typography>
         {data?.map((item,index)=>(
         <React.Fragment key={index}>
-         <input className='form-control' type='text' value={item.title} onChange={(event)=>handledatatitle(event,index)}></input>
+         <input required className='form-control' type='text' value={item.title} onChange={(event)=>handledatatitle(event,index)}></input>
          {item.list.map((subitem,ind)=>(
          <div key={ind} className='listt'>
-         <input className='form-control' type='text' value={subitem.name} onChange={(event)=>updatesubtask(event,ind,index)} ></input>
+         <input required className='form-control' type='text' value={subitem.name} onChange={(event)=>updatesubtask(event,ind,index)} ></input>
          <IconButton ><i className="fas fa-minus" onClick={()=>onremovesubitem(index,ind)}></i></IconButton>
          {(ind===item.list.length-1)? <IconButton onClick={()=>addsubitemtask(index)}><i className="fas fa-plus"></i></IconButton>:<></>}
          </div>
